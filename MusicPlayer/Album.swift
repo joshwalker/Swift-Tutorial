@@ -48,11 +48,11 @@ class Album {
                 if price == nil {
                     price = result["collectionPrice"] as? String
                     if price == nil {
-                        var priceFloat: Float? = result["collectionPrice"] as? Float
-                        var nf: NSNumberFormatter = NSNumberFormatter()
+                        let priceFloat: Float? = result["collectionPrice"] as? Float
+                        let nf: NSNumberFormatter = NSNumberFormatter()
                         nf.maximumFractionDigits = 2
                         if priceFloat != nil {
-                            price = "$"+nf.stringFromNumber(priceFloat!)
+                            price = "$"+nf.stringFromNumber(priceFloat!)!
                         }
                     }
                 }
@@ -66,9 +66,9 @@ class Album {
                     itemURL = result["trackViewUrl"] as? String
                 }
                 
-                var collectionId = result["collectionId"] as? Int
+                let collectionId = result["collectionId"] as? Int
                 
-                var newAlbum = Album(name: name!, price: price!, thumbnailImageURL: thumbnailURL, largeImageURL: imageURL, itemURL: itemURL!, artistURL: artistURL, collectionId: collectionId!)
+                let newAlbum = Album(name: name!, price: price!, thumbnailImageURL: thumbnailURL, largeImageURL: imageURL, itemURL: itemURL!, artistURL: artistURL, collectionId: collectionId!)
                 albums.append(newAlbum)
                 
             }

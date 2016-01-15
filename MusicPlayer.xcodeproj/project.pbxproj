@@ -174,6 +174,8 @@
 		027047FB19C8E08B00FDA1C5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftMigration = 0720;
+				LastSwiftUpdateCheck = 0720;
 				LastUpgradeCheck = 0600;
 				ORGANIZATIONNAME = "JQ Software LLC";
 				TargetAttributes = {

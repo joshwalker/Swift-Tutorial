@@ -38,14 +38,14 @@ class Track {
                             trackTitle = "Unknown"
                         }
                         else if(trackPrice == nil) {
-                            println("No trackPrice in \(trackInfo)")
+                            print("No trackPrice in \(trackInfo)")
                             trackPrice = "?"
                         }
                         else if(trackPreviewUrl == nil) {
                             trackPreviewUrl = ""
                         }
                         
-                        var track = Track(title: trackTitle!, price: trackPrice!, previewUrl: trackPreviewUrl!)
+                        let track = Track(title: trackTitle!, price: trackPrice!, previewUrl: trackPreviewUrl!)
                         tracks.append(track)
                         
                     }
