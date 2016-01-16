@@ -19,6 +19,8 @@
 		0270482F19C8F43500FDA1C5 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0270482E19C8F43500FDA1C5 /* DetailsViewController.swift */; };
 		0270483119C8F6D000FDA1C5 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0270483019C8F6D000FDA1C5 /* Track.swift */; };
 		0270483519C8F80000FDA1C5 /* TrackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0270483419C8F80000FDA1C5 /* TrackCell.swift */; };
+		D6AC03B21C4AEB46008E21E6 /* Kingfisher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6AC03B01C4AEB3A008E21E6 /* Kingfisher.framework */; };
+		D6AC03B31C4AEB46008E21E6 /* Kingfisher.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D6AC03B01C4AEB3A008E21E6 /* Kingfisher.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -30,6 +32,20 @@
 			remoteInfo = MusicPlayer;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D6AC03B41C4AEB46008E21E6 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				D6AC03B31C4AEB46008E21E6 /* Kingfisher.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0270480319C8E08B00FDA1C5 /* MusicPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MusicPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -48,6 +64,7 @@
 		0270482E19C8F43500FDA1C5 /* DetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
 		0270483019C8F6D000FDA1C5 /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		0270483419C8F80000FDA1C5 /* TrackCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackCell.swift; sourceTree = "<group>"; };
+		D6AC03B01C4AEB3A008E21E6 /* Kingfisher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Kingfisher.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6AC03B21C4AEB46008E21E6 /* Kingfisher.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +89,7 @@
 		027047FA19C8E08B00FDA1C5 = {
 			isa = PBXGroup;
 			children = (
+				D6AC03B01C4AEB3A008E21E6 /* Kingfisher.framework */,
 				0270480519C8E08B00FDA1C5 /* MusicPlayer */,
 				0270481B19C8E08B00FDA1C5 /* MusicPlayerTests */,
 				0270480419C8E08B00FDA1C5 /* Products */,
@@ -140,6 +159,7 @@
 				027047FF19C8E08B00FDA1C5 /* Sources */,
 				0270480019C8E08B00FDA1C5 /* Frameworks */,
 				0270480119C8E08B00FDA1C5 /* Resources */,
+				D6AC03B41C4AEB46008E21E6 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -362,6 +382,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = MusicPlayer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -372,6 +396,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = MusicPlayer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";

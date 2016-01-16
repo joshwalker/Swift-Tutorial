@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class SearchResultsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, APIControllerProtocol {
     
@@ -41,7 +42,6 @@ class SearchResultsViewController: UIViewController, UITableViewDataSource, UITa
         
         let album = self.albums[indexPath.row]
         cell.textLabel?.text = album.title
-        cell.imageView?.image = UIImage(named: "Blank52")
         
         // Get the formatted price string for display in the subtitle
         let formattedPrice = album.price
@@ -49,41 +49,8 @@ class SearchResultsViewController: UIViewController, UITableViewDataSource, UITa
         // Grab the artworkUrl60 key to get an image URL for the app's thumbnail
         let urlString = album.thumbnailImageURL
         
-        // Check our image cache for the existing key. This is just a dictionary of UIImages
-        //var image: UIImage? = self.imageCache.valueForKey(urlString) as? UIImage
-        var image = self.imageCache[urlString]
-        
-        
-        if( image == nil ) {
-            // If the image does not exist, we need to download it
-            let imgURL: NSURL = NSURL(string: urlString) ?? NSURL()
-            
-            // Download an NSData representation of the image at the URL
-            let request: NSURLRequest = NSURLRequest(URL: imgURL)
-            NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler: {(response: NSURLResponse?,data: NSData?,error: NSError?) -> Void in
-                if let data = data where error == nil {
-                    image = UIImage(data: data)
-                    
-                    // Store the image in to our cache
-                    self.imageCache[urlString] = image
-                    dispatch_async(dispatch_get_main_queue(), {
-                        if let cellToUpdate = tableView.cellForRowAtIndexPath(indexPath) {
-                            cellToUpdate.imageView?.image = image
-                        }
-                    })
-                }
-                else {
-                    print("Error: \(error?.localizedDescription)")
-                }
-            })
-            
-        }
-        else {
-            dispatch_async(dispatch_get_main_queue(), {
-                if let cellToUpdate = tableView.cellForRowAtIndexPath(indexPath) {
-                    cellToUpdate.imageView?.image = image
-                }
-            })
+        if let thumbURL = NSURL(string: urlString) {
+            cell.imageView?.kf_setImageWithURL(thumbURL, placeholderImage: UIImage(named: "Blank52"))
         }
         
         cell.detailTextLabel?.text = formattedPrice

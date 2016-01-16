@@ -8,6 +8,7 @@
 
 import UIKit
 import MediaPlayer
+import Kingfisher
 
 class DetailsViewController: UIViewController, APIControllerProtocol, UITableViewDelegate, UITableViewDataSource {
     
@@ -27,13 +28,12 @@ class DetailsViewController: UIViewController, APIControllerProtocol, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         titleLabel.text = self.album?.title
+        
         if let
             largeImageURLString = album?.largeImageURL,
-            largeImageURL = NSURL(string: largeImageURLString),
-            data = NSData(contentsOfURL: largeImageURL)
+            largeImageURL = NSURL(string: largeImageURLString)
         {
-            albumCover.image = UIImage(data: data)
-        //albumCover.image = UIImage(data: NSData(contentsOfURL: NSURL(string: self.album!.largeImageURL)!)!)
+            albumCover.kf_setImageWithURL(largeImageURL)
         }
         if self.album != nil {
             api.lookupAlbum(self.album!.collectionId)
