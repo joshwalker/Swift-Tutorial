@@ -8,13 +8,13 @@
 
 import Foundation
 
-protocol APIControllerProtocol {
+protocol APIControllerProtocol: class {
     func didReceiveAPIResults(results: NSDictionary)
 }
 
 class APIController {
     
-    var delegate: APIControllerProtocol
+    weak var delegate: APIControllerProtocol?
 
     init(delegate: APIControllerProtocol) {
         self.delegate = delegate
@@ -32,7 +32,7 @@ class APIController {
             }
             do {
                 if let jsonResult = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as? NSDictionary {
-                    self.delegate.didReceiveAPIResults(jsonResult)
+                    self.delegate?.didReceiveAPIResults(jsonResult)
                 }
             } catch {
                 print("Parse Error")
