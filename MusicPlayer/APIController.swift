@@ -8,6 +8,8 @@
 
 import Foundation
 
+typealias completionHandler = (NSDictionary) -> ()
+
 private enum Path {
     case Search(term: String)
     case Lookup(albumID: String)
@@ -33,19 +35,9 @@ private enum Path {
     }
 }
 
-protocol APIControllerProtocol: class {
-    func didReceiveAPIResults(results: NSDictionary)
-}
-
 class APIController {
     
-    weak var delegate: APIControllerProtocol?
-
-    init(delegate: APIControllerProtocol) {
-        self.delegate = delegate
-    }
-    
-    func get(path: String) {
+    func get(path: String, completion: completionHandler) throws -> Void {
         let url = NSURL(string: path)
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithURL(url!, completionHandler: {data, response, error -> Void in
@@ -57,7 +49,9 @@ class APIController {
             }
             do {
                 if let jsonResult = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as? NSDictionary {
-                    self.delegate?.didReceiveAPIResults(jsonResult)
+                    //self.delegate?.didReceiveAPIResults(jsonResult)
+                    completion(jsonResult)
+                    
                 }
             } catch {
                 print("Parse Error")
@@ -66,12 +60,12 @@ class APIController {
         task.resume()
     }
     
-    func searchItunesFor(searchTerm: String) {
-        get(Path.Search(term: searchTerm).urlString())
+    func searchItunesFor(searchTerm: String, completion: completionHandler) throws -> Void {
+        try get(Path.Search(term: searchTerm).urlString(), completion:  completion)
     }
     
-    func lookupAlbum(collectionId: Int) {
-        get(Path.Lookup(albumID: String(collectionId)).urlString())
+    func lookupAlbum(collectionId: Int, completion: completionHandler) throws -> Void {
+        try get(Path.Lookup(albumID: String(collectionId)).urlString(), completion: completion)
     }
     
 }

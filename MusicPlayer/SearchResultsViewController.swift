@@ -9,7 +9,7 @@
 import UIKit
 import Kingfisher
 
-class SearchResultsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, APIControllerProtocol {
+class SearchResultsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet var appsTableView : UITableView?
     var albums = [Album]()
@@ -19,9 +19,16 @@ class SearchResultsViewController: UIViewController, UITableViewDataSource, UITa
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        api = APIController(delegate: self)
+        api = APIController()
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        api!.searchItunesFor("Beatles")
+        try? api!.searchItunesFor("Beatles") { results in
+            let resultsArr: NSArray = results["results"] as! NSArray
+            dispatch_async(dispatch_get_main_queue(), {
+                self.albums = Album.albumsWithJSON(resultsArr)
+                self.appsTableView!.reloadData()
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            })
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -65,22 +72,10 @@ class SearchResultsViewController: UIViewController, UITableViewDataSource, UITa
         })
     }
     
-    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let detailsViewController: DetailsViewController = segue.destinationViewController as! DetailsViewController
         let albumIndex = appsTableView!.indexPathForSelectedRow!.row
         let selectedAlbum = self.albums[albumIndex]
         detailsViewController.album = selectedAlbum
     }
-    
-    func didReceiveAPIResults(results: NSDictionary) {
-        let resultsArr: NSArray = results["results"] as! NSArray
-        dispatch_async(dispatch_get_main_queue(), {
-            self.albums = Album.albumsWithJSON(resultsArr)
-            self.appsTableView!.reloadData()
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-        })
-    }
-
 }
-

@@ -10,7 +10,7 @@ import UIKit
 import MediaPlayer
 import Kingfisher
 
-class DetailsViewController: UIViewController, APIControllerProtocol, UITableViewDelegate, UITableViewDataSource {
+class DetailsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     var album: Album?
     var tracks = [Track]()
@@ -18,7 +18,7 @@ class DetailsViewController: UIViewController, APIControllerProtocol, UITableVie
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var albumCover: UIImageView!
     @IBOutlet weak var tracksTableView: UITableView!
-    lazy var api : APIController = APIController(delegate: self)
+    lazy var api : APIController = APIController()
     var mediaPlayer: MPMoviePlayerController = MPMoviePlayerController()
     
     required init?(coder aDecoder: NSCoder) {
@@ -36,7 +36,15 @@ class DetailsViewController: UIViewController, APIControllerProtocol, UITableVie
             albumCover.kf_setImageWithURL(largeImageURL)
         }
         if self.album != nil {
-            api.lookupAlbum(self.album!.collectionId)
+            try? api.lookupAlbum(self.album!.collectionId) { results in
+                let resultsArr: NSArray = results["results"] as! NSArray
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.tracks = Track.tracksWithJSON(resultsArr)
+                    self.tracksTableView.reloadData()
+                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                })
+
+            }
         }
     }
     
@@ -68,16 +76,6 @@ class DetailsViewController: UIViewController, APIControllerProtocol, UITableVie
         cell.layer.transform = CATransform3DMakeScale(0.1,0.1,1)
         UIView.animateWithDuration(0.25, animations: {
             cell.layer.transform = CATransform3DMakeScale(1,1,1)
-        })
-    }
-    
-    // MARK: APIControllerProtocol
-    func didReceiveAPIResults(results: NSDictionary) {
-        var resultsArr: NSArray = results["results"] as! NSArray
-        dispatch_async(dispatch_get_main_queue(), {
-            self.tracks = Track.tracksWithJSON(resultsArr)
-            self.tracksTableView.reloadData()
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
         })
     }
     
