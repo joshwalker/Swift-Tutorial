@@ -8,6 +8,31 @@
 
 import Foundation
 
+private enum Path {
+    case Search(term: String)
+    case Lookup(albumID: String)
+    
+    func urlString() -> String {
+        switch self {
+        case let .Search(term: term):
+            let escapedSearchTerm = escapeURLString(term)
+            return "https://itunes.apple.com/search?term=\(escapedSearchTerm)&media=music&entity=album"
+        case let .Lookup(albumID: albumID):
+            return "https://itunes.apple.com/lookup?id=\(albumID)&entity=song"
+        }
+    }
+    
+    func escapeURLString(string: String) -> String {
+        let unspacedString = string.stringByReplacingOccurrencesOfString(" ", withString: "+", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil)
+        
+        // Now escape anything else that isn't URL-friendly
+        if let escapedString = unspacedString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) {
+            return escapedString
+        }
+        return unspacedString
+    }
+}
+
 protocol APIControllerProtocol: class {
     func didReceiveAPIResults(results: NSDictionary)
 }
@@ -42,19 +67,11 @@ class APIController {
     }
     
     func searchItunesFor(searchTerm: String) {
-        
-        // The iTunes API wants multiple terms separated by + symbols, so replace spaces with + signs
-        let itunesSearchTerm = searchTerm.stringByReplacingOccurrencesOfString(" ", withString: "+", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil)
-        
-        // Now escape anything else that isn't URL-friendly
-        if let escapedSearchTerm = itunesSearchTerm.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) {
-            let urlPath = "https://itunes.apple.com/search?term=\(escapedSearchTerm)&media=music&entity=album"
-            get(urlPath)
-        }
+        get(Path.Search(term: searchTerm).urlString())
     }
     
     func lookupAlbum(collectionId: Int) {
-        get("https://itunes.apple.com/lookup?id=\(collectionId)&entity=song")
+        get(Path.Lookup(albumID: String(collectionId)).urlString())
     }
     
 }
