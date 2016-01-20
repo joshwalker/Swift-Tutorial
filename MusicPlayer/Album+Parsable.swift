@@ -12,40 +12,39 @@ extension Album: Parsable {
  
     static func initWithJSON(json: JSON) throws -> Album {
         
-        let result = json
-        
-        var name = result["trackName"] as? String
-        if name == nil {
-            name = result["collectionName"] as? String
+        let name: String
+        if let trackName = try? JSONString(json, field: "trackName") {
+            name = trackName
+        } else {
+            name = try JSONString(json, field: "collectionName")
         }
         
         // Sometimes price comes in as formattedPrice, sometimes as collectionPrice.. and sometimes it's a float instead of a string. Hooray!
-        var price = result["formattedPrice"] as? String
-        if price == nil {
-            price = result["collectionPrice"] as? String
-            if price == nil {
-                let priceFloat: Float? = result["collectionPrice"] as? Float
-                let nf: NSNumberFormatter = NSNumberFormatter()
-                nf.maximumFractionDigits = 2
-                if priceFloat != nil {
-                    price = "$"+nf.stringFromNumber(priceFloat!)!
-                }
-            }
+        var price: String
+        if let formattedPrice = try? JSONString(json, field: "formattedPrice") {
+            price = formattedPrice
+        } else {
+            price = try JSONFloatOrString(json, field: "collectionPrice")
         }
         
-        let thumbnailURL = result["artworkUrl60"] as? String ?? ""
-        let imageURL = result["artworkUrl100"] as? String ?? ""
-        let artistURL = result["artistViewUrl"] as? String ?? ""
         
-        var itemURL = result["collectionViewUrl"] as? String
-        if itemURL == nil {
-            itemURL = result["trackViewUrl"] as? String
+        let thumbnailURL = try? JSONString(json, field: "artworkUrl60")
+        let imageURL = try? JSONString(json, field: "artworkUrl100")
+        let artistURL = try? JSONString(json, field: "artistViewUrl")
+        
+        let collectionViewURL = try? JSONString(json, field: "collectionViewUrl")
+        
+        let itemURL: String
+        if let collectionViewURL = collectionViewURL {
+            itemURL = collectionViewURL
+        } else {
+            itemURL = try JSONString(json, field: "trackViewUrl")
         }
         
-        let collectionId = result["collectionId"] as? Int
+        let collectionId = try JSONInt(json, field: "collectionId")
         
         
-        let album = Album(name: name!, price: price!, thumbnailImageURL: thumbnailURL, largeImageURL: imageURL, itemURL: itemURL!, artistURL: artistURL, collectionId: collectionId!)
+        let album = Album(name: name, price: price, thumbnailImageURL: thumbnailURL ?? "", largeImageURL: imageURL ?? "", itemURL: itemURL, artistURL: artistURL ?? "", collectionId: collectionId)
         
         return album
     }

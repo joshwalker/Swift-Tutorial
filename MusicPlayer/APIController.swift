@@ -8,7 +8,11 @@
 
 import Foundation
 
-typealias completionHandler = (NSDictionary) -> ()
+enum APIError: ErrorType {
+    case Parse(message: String)
+    case JSONDeserialzation(message: String)
+    case Empty
+}
 
 private enum Path {
     case Search(term: String)

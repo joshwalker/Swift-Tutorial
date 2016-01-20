@@ -12,9 +12,10 @@ typealias JSON = AnyObject
 typealias JSONDictionary = Dictionary<String, JSON>
 typealias JSONArray = Array<JSON>
 
-enum APIError: ErrorType {
-    case Parse(message: String)
-    case JSONDeserialzation(message: String)
+enum ParseError: ErrorType {
+    case MissingRequiredField(field: String)
+    case MissingRequiredValue(field: String)
+    case IncorrectFormat(field: String)
     case Empty
 }
 
@@ -58,5 +59,63 @@ extension Parsable {
         }
         return try jsonArray.map({ try initWithJSON( $0) })
     }
+    
+    // JSON validation helpers
+    
+    static func JSONString(object: JSON?, field: String) throws -> String {
+        guard let json = object else {
+            throw ParseError.MissingRequiredField(field: field)
+        }
+        if let stringVal = json[field] as? String {
+            return stringVal
+        } else {
+            throw ParseError.MissingRequiredValue(field: field)
+        }
+    }
+    
+    static func JSONBool(object: JSON?, field: String) -> Bool {
+        if let boolVal = object?[field] as? Bool where boolVal == true {
+            return true
+        }
+        return false
+    }
+    
+    static func JSONInt(object: JSON?, field: String) throws -> Int {
+        guard let json = object else {
+            throw ParseError.MissingRequiredField(field: field)
+        }
+        if let intVal = json[field] as? Int {
+            return intVal
+        } else {
+            throw ParseError.MissingRequiredValue(field: field)
+        }
+    }
+    
+     static func JSONIntOrString(object: JSON?, field: String) throws -> String {
+        guard let json = object else {
+            throw ParseError.MissingRequiredField(field: field)
+        }
+        if let stringVal = json[field] as? String where stringVal != "" {
+            return stringVal
+        } else if let intVal = json[field] as? Int {
+            return String(intVal)
+        } else {
+            throw ParseError.MissingRequiredValue(field: field)
+        }
+    }
+    
+    static func JSONFloatOrString(object: JSON?, field: String) throws -> String {
+        guard let json = object else {
+            throw ParseError.MissingRequiredField(field: field)
+        }
+        if let stringVal = json[field] as? String where stringVal != "" {
+            return stringVal
+        } else if let intVal = json[field] as? Float {
+            return String(intVal)
+        } else {
+            throw ParseError.MissingRequiredValue(field: field)
+        }
+    }
+
 
 }

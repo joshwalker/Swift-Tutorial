@@ -12,31 +12,17 @@ extension Track: Parsable {
     
     static func initWithJSON(json: JSON) throws -> Track {
 
-        let trackInfo = json
         // Create the track
-        if let kind = trackInfo["kind"] as? String {
-            if kind=="song" {
+        if let kind = try? JSONString(json, field: "kind") where kind == "song" {
                 
-                var trackPrice = trackInfo["trackPrice"] as? String
-                var trackTitle = trackInfo["trackName"] as? String
-                var trackPreviewUrl = trackInfo["previewUrl"] as? String
-                
-                if(trackTitle == nil) {
-                    trackTitle = "Unknown"
-                }
-                else if(trackPrice == nil) {
-                    print("No trackPrice in \(trackInfo)")
-                    trackPrice = "?"
-                }
-                else if(trackPreviewUrl == nil) {
-                    trackPreviewUrl = ""
-                }
-                
-                let track = Track.init(title: trackTitle!, price: trackPrice!, previewUrl: trackPreviewUrl!)
-                return track
-            }
+            let trackPrice = try? JSONString(json, field: "trackPrice")
+            let trackTitle = try? JSONString(json, field: "trackName")
+            let trackPreviewUrl = try? JSONString(json, field: "previewUrl")
+            
+            let track = Track(title: trackTitle ?? "Unknown", price: trackPrice ?? "?", previewUrl: trackPreviewUrl ?? "")
+            return track
         }
-        throw APIError.Empty
+        throw ParseError.Empty
     }
     
     static func objectsWithJSON(json: JSON) throws -> [Track] {
