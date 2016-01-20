@@ -21,6 +21,7 @@
 		0270483519C8F80000FDA1C5 /* TrackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0270483419C8F80000FDA1C5 /* TrackCell.swift */; };
 		D6AC03B21C4AEB46008E21E6 /* Kingfisher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6AC03B01C4AEB3A008E21E6 /* Kingfisher.framework */; };
 		D6AC03B31C4AEB46008E21E6 /* Kingfisher.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D6AC03B01C4AEB3A008E21E6 /* Kingfisher.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D6AC03B71C4ED954008E21E6 /* Parsable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AC03B61C4ED954008E21E6 /* Parsable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,7 @@
 		0270483019C8F6D000FDA1C5 /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		0270483419C8F80000FDA1C5 /* TrackCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackCell.swift; sourceTree = "<group>"; };
 		D6AC03B01C4AEB3A008E21E6 /* Kingfisher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Kingfisher.framework; sourceTree = "<group>"; };
+		D6AC03B61C4ED954008E21E6 /* Parsable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parsable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +155,7 @@
 			children = (
 				0270482C19C8F35700FDA1C5 /* Album.swift */,
 				0270483019C8F6D000FDA1C5 /* Track.swift */,
+				D6AC03B61C4ED954008E21E6 /* Parsable.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -264,6 +267,7 @@
 				0270483519C8F80000FDA1C5 /* TrackCell.swift in Sources */,
 				0270480B19C8E08B00FDA1C5 /* SearchResultsViewController.swift in Sources */,
 				0270480919C8E08B00FDA1C5 /* AppDelegate.swift in Sources */,
+				D6AC03B71C4ED954008E21E6 /* Parsable.swift in Sources */,
 				0270482919C8E2E700FDA1C5 /* APIController.swift in Sources */,
 				0270482D19C8F35700FDA1C5 /* Album.swift in Sources */,
 				0270482F19C8F43500FDA1C5 /* DetailsViewController.swift in Sources */,

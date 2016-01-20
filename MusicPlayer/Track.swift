@@ -7,12 +7,12 @@
 //
 
 import Foundation
-class Track {
+
+struct Track: Parsable {
     
     var title: String
     var price: String
     var previewUrl: String
-    var tracks = [Track]()
     
     init(title: String, price: String, previewUrl: String) {
         self.title = title
@@ -20,39 +20,46 @@ class Track {
         self.previewUrl = previewUrl
     }
     
-    class func tracksWithJSON(allResults: NSArray) -> [Track] {
+    static func initWithJSON(json: JSON) throws -> Track {
         
-        var tracks = [Track]()
-        
-        if allResults.count>0 {
-            for trackInfo in allResults {
-                // Create the track
-                if let kind = trackInfo["kind"] as? String {
-                    if kind=="song" {
-                        
-                        var trackPrice = trackInfo["trackPrice"] as? String
-                        var trackTitle = trackInfo["trackName"] as? String
-                        var trackPreviewUrl = trackInfo["previewUrl"] as? String
-                        
-                        if(trackTitle == nil) {
-                            trackTitle = "Unknown"
-                        }
-                        else if(trackPrice == nil) {
-                            print("No trackPrice in \(trackInfo)")
-                            trackPrice = "?"
-                        }
-                        else if(trackPreviewUrl == nil) {
-                            trackPreviewUrl = ""
-                        }
-                        
-                        let track = Track(title: trackTitle!, price: trackPrice!, previewUrl: trackPreviewUrl!)
-                        tracks.append(track)
-                        
-                    }
+        print(json)
+        let trackInfo = json
+                           // Create the track
+        if let kind = trackInfo["kind"] as? String {
+            if kind=="song" {
+                
+                var trackPrice = trackInfo["trackPrice"] as? String
+                var trackTitle = trackInfo["trackName"] as? String
+                var trackPreviewUrl = trackInfo["previewUrl"] as? String
+                
+                if(trackTitle == nil) {
+                    trackTitle = "Unknown"
                 }
+                else if(trackPrice == nil) {
+                    print("No trackPrice in \(trackInfo)")
+                    trackPrice = "?"
+                }
+                else if(trackPreviewUrl == nil) {
+                    trackPreviewUrl = ""
+                }
+                
+                let track = Track.init(title: trackTitle!, price: trackPrice!, previewUrl: trackPreviewUrl!)
+                return track
             }
         }
-        return tracks
+        throw APIError.Empty
+    }
+    
+    static func objectsWithJSON(json: JSON) throws -> [Track] {
+        let jsonArray: JSONArray
+        if let json = json as? JSONArray {
+            jsonArray = json
+        } else {
+            throw APIError.Empty
+        }
+        return jsonArray.flatMap({ json in
+            try? initWithJSON( json)
+        })
     }
     
 }

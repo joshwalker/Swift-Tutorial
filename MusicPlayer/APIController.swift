@@ -37,7 +37,7 @@ private enum Path {
 
 class APIController {
     
-    func get(path: String, completion: completionHandler) throws -> Void {
+    func get<P: Parsable>(path: String, completion: ([P]) -> ()) throws -> Void {
         let url = NSURL(string: path)
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithURL(url!, completionHandler: {data, response, error -> Void in
@@ -48,11 +48,8 @@ class APIController {
                 print(error.localizedDescription)
             }
             do {
-                if let jsonResult = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as? NSDictionary {
-                    //self.delegate?.didReceiveAPIResults(jsonResult)
-                    completion(jsonResult)
-                    
-                }
+                let results: [P] = try P.deserializeData(data)
+                completion(results)
             } catch {
                 print("Parse Error")
             }
@@ -60,11 +57,11 @@ class APIController {
         task.resume()
     }
     
-    func searchItunesFor(searchTerm: String, completion: completionHandler) throws -> Void {
-        try get(Path.Search(term: searchTerm).urlString(), completion:  completion)
+    func searchItunesFor(searchTerm: String, completion: ([Album]) -> Void) throws -> Void {
+        try get(Path.Search(term: searchTerm).urlString(), completion: completion)
     }
     
-    func lookupAlbum(collectionId: Int, completion: completionHandler) throws -> Void {
+    func lookupAlbum(collectionId: Int, completion: ([Track]) -> Void) throws -> Void {
         try get(Path.Lookup(albumID: String(collectionId)).urlString(), completion: completion)
     }
     

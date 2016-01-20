@@ -37,9 +37,8 @@ class DetailsViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
         if self.album != nil {
             try? api.lookupAlbum(self.album!.collectionId) { results in
-                let resultsArr: NSArray = results["results"] as! NSArray
                 dispatch_async(dispatch_get_main_queue(), {
-                    self.tracks = Track.tracksWithJSON(resultsArr)
+                    self.tracks = results
                     self.tracksTableView.reloadData()
                     UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 })

@@ -22,9 +22,8 @@ class SearchResultsViewController: UIViewController, UITableViewDataSource, UITa
         api = APIController()
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         try? api!.searchItunesFor("Beatles") { results in
-            let resultsArr: NSArray = results["results"] as! NSArray
             dispatch_async(dispatch_get_main_queue(), {
-                self.albums = Album.albumsWithJSON(resultsArr)
+                self.albums = results
                 self.appsTableView!.reloadData()
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
             })
