@@ -30,7 +30,7 @@ extension Track: Parsable {
         if let json = json as? JSONArray {
             jsonArray = json
         } else {
-            throw APIError.Empty
+            throw ParseError.Empty
         }
         return jsonArray.flatMap({ json in
             try? initWithJSON( json)

@@ -11,7 +11,27 @@ import Foundation
 enum APIError: ErrorType {
     case Parse(message: String)
     case JSONDeserialzation(message: String)
-    case Empty
+    case NetworkRequest(message: String)
+    case NoMoreResults(message: String)
+    case Offline(message: String)
+    case Unknown(message: String)
+    
+    func description() -> String {
+        switch self {
+        case .Parse(let message):
+            return "parse error: \(message)"
+        case .NetworkRequest(let message):
+            return "network error: \(message)"
+        case .JSONDeserialzation(let message):
+            return "json serialization error: \(message)"
+        case .NoMoreResults(let message):
+            return "no more results error: \(message)"
+        case .Offline(let message):
+            return "device offline: \(message)"
+        case .Unknown(let message):
+            return "unknown error: \(message)"
+        }
+    }
 }
 
 private enum Path {
@@ -54,8 +74,16 @@ class APIController {
             do {
                 let results: [P] = try P.deserializeData(data)
                 completion(results)
+            } catch ParseError.MissingRequiredField(let field) {
+                print("Missing Required Field: \(field)")
+            } catch ParseError.IncorrectFormat(let field) {
+                print("Incorrect Format for Field: \(field)")
+            } catch ParseError.Empty {
+                print("Parser returned empty data set")
+            } catch let parseError as NSError {
+                print(parseError.localizedDescription)
             } catch {
-                print("Parse Error")
+                print("Unknown Error")
             }
         })
         task.resume()

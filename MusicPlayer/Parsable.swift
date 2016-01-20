@@ -47,7 +47,7 @@ extension Parsable {
             let elements = try objectsWithJSON(dataElement)
             return elements
         }
-        throw APIError.Empty
+        throw ParseError.Empty
     }
     
     static func objectsWithJSON(json: JSON) throws -> [Self] {
@@ -55,7 +55,7 @@ extension Parsable {
         if let json = json as? JSONArray {
             jsonArray = json
         } else {
-            throw APIError.Empty
+            throw ParseError.Empty
         }
         return try jsonArray.map({ try initWithJSON( $0) })
     }
